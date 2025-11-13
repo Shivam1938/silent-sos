@@ -51,6 +51,6 @@ For Android emulators use `http://10.0.2.2:4000` as the API URL. Physical device
 Good luck at the hackathon—ship fast and stay safe! 🛡️
 
 
-cd server - npm run dev
-cd mobile - npm run android
+## cd server - npm run dev
+## cd mobile - npm run android
 
