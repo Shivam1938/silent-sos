@@ -1,4 +1,4 @@
-import type { NextFunction, Response } from 'express';
+import type { Request, NextFunction, Response, RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import type { AuthenticatedRequest } from '../types/authenticated-request.js';
@@ -11,7 +11,7 @@ interface JwtPayload {
   exp: number;
 }
 
-export const authenticate = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const authenticate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Authorization header missing' });
@@ -25,7 +25,7 @@ export const authenticate = (req: AuthenticatedRequest, res: Response, next: Nex
   try {
     const env = getEnv();
     const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
-    req.userId = decoded.userId;
+    (req as AuthenticatedRequest).userId = decoded.userId;
     return next();
   } catch (error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid or expired token' });

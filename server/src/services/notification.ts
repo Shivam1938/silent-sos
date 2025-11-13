@@ -3,8 +3,11 @@ import type { ISosEvent } from '../models/SosEvent.js';
 import { getEnv } from '../config/env.js';
 import { twilioClient } from './twilio.js';
 
+// Type for lean contact (plain object from .lean() query)
+type ContactData = Pick<IContact, 'phoneNumber'>;
+
 interface SendSosAlertsParams {
-  contacts: IContact[];
+  contacts: ContactData[];
   event: ISosEvent;
 }
 
