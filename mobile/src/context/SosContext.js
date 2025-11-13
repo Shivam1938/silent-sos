@@ -49,8 +49,11 @@ export const SosProvider = ({ children }) => {
     try {
       await ensurePermissionsAsync();
       await stopWatcher();
+      // Get accurate location with timeout
       const position = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Highest,
+        timeout: 15000, // 15 seconds timeout
+        mayShowUserSettingsDialog: true,
       });
 
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -68,11 +71,13 @@ export const SosProvider = ({ children }) => {
         lastLocation: position.coords,
       });
 
+      // Start location tracking with better settings for physical devices
       watcherRef.current = await Location.watchPositionAsync(
         {
-          accuracy: Location.Accuracy.Highest,
-          timeInterval: 15000,
-          distanceInterval: 10,
+          accuracy: Location.Accuracy.BestForNavigation,
+          timeInterval: 10000, // Update every 10 seconds
+          distanceInterval: 5, // Update every 5 meters
+          mayShowUserSettingsDialog: false,
         },
         async (update) => {
           setActiveEvent((prev) =>

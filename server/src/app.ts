@@ -10,7 +10,17 @@ import authRouter from './routes/auth.js';
 
 const app = express();
 
-app.use(cors());
+// CORS configuration - flexible for development and production
+const corsOptions = {
+  origin: process.env.CLIENT_BASE_URL === '*' 
+    ? '*' 
+    : (process.env.CLIENT_BASE_URL?.split(',') || '*'),
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));

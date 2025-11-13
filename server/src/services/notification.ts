@@ -9,17 +9,23 @@ interface SendSosAlertsParams {
 }
 
 const buildSosMessage = (event: ISosEvent) => {
-  const latestLocation = event.locations.at(-1);
-  if (!latestLocation) {
+  // Use lastLocation if available, otherwise use latest from locations array
+  const location = (event.lastLocation && event.lastLocation.latitude && event.lastLocation.longitude)
+    ? event.lastLocation
+    : event.locations.at(-1);
+    
+  if (!location || !location.latitude || !location.longitude) {
     return 'Silent SOS alert triggered. Location unavailable.';
   }
-  const { latitude, longitude } = latestLocation;
+  
+  const { latitude, longitude } = location;
   const mapsUrl = `https://maps.google.com/?q=${latitude},${longitude}`;
   return [
     '🚨 Silent SOS Alert 🚨',
     'Your contact triggered an emergency alert.',
     `Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
     `Live map: ${mapsUrl}`,
+    '\n⚠️ Location updates automatically. Check the map link for latest position.',
   ].join('\n');
 };
 

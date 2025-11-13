@@ -75,11 +75,23 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signOut = useCallback(async () => {
-    setToken(null);
-    setUser(null);
-    setAuthToken(null);
-    setAuthError(null);
-    await clearAuthState();
+    try {
+      setToken(null);
+      setUser(null);
+      setAuthToken(null);
+      setAuthError(null);
+      await clearAuthState();
+      // Force navigation reset by setting loading state briefly
+      setIsLoading(true);
+      setTimeout(() => setIsLoading(false), 100);
+    } catch (error) {
+      console.error('Error during sign out:', error);
+      // Still clear local state even if storage fails
+      setToken(null);
+      setUser(null);
+      setAuthToken(null);
+      setAuthError(null);
+    }
   }, []);
 
   const resetError = useCallback(() => {

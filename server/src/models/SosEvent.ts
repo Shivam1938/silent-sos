@@ -11,6 +11,12 @@ export interface ISosEvent extends Document {
     accuracy?: number;
     timestamp: Date;
   }>;
+  lastLocation?: {
+    latitude: number;
+    longitude: number;
+    accuracy?: number;
+  };
+  lastUpdate?: Date;
   cancelledReason?: string;
   cancelledAt?: Date;
   createdAt: Date;
@@ -33,6 +39,12 @@ const sosEventSchema = new Schema<ISosEvent>(
         timestamp: { type: Date, default: Date.now },
       },
     ],
+    lastLocation: {
+      latitude: { type: Number },
+      longitude: { type: Number },
+      accuracy: { type: Number },
+    },
+    lastUpdate: { type: Date },
     cancelledReason: { type: String },
     cancelledAt: { type: Date },
   },
