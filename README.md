@@ -196,6 +196,9 @@ Or scan the QR code with Expo Go app on your phone.
 
 ### First Time Setup
 
+1. `cd server` → `npm run dev`
+2. `cd mobile` → `npm run android`
+
 1. **Register an Account**
    - Open the app and tap on "Register"
    - Enter your display name, email, and password
