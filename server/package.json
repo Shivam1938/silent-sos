@@ -6,12 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.build.json",
-<<<<<<< HEAD
     "start": "node dist/index.js",
     "postinstall": "npm run build",
-=======
-    "start": "node server/src/index.js",
->>>>>>> d383a5e2425e5ccfd59f1b3af7d8ffc8d6ea9bd6
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
