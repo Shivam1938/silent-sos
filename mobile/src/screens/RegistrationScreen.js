@@ -36,8 +36,23 @@ export const RegistrationScreen = ({ navigation }) => {
     try {
       await register({ displayName: displayName.trim(), pin });
     } catch (error) {
-      console.error(error);
-      Alert.alert('Registration failed', error?.response?.data?.message ?? error.message);
+      console.error('[Registration Error]', error);
+      
+      let errorMessage = 'Registration failed';
+      
+      if (error.userMessage) {
+        errorMessage = error.userMessage;
+      } else if (error.code === 'ECONNABORTED') {
+        errorMessage = 'Request timeout. Please check your internet connection and try again.';
+      } else if (error.message === 'Network Error' || !error.response) {
+        errorMessage = 'Cannot connect to server. Please check:\n\n1. Internet connection\n2. Server is running\n3. Try again in a moment';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else {
+        errorMessage = error.message || 'Unknown error occurred';
+      }
+      
+      Alert.alert('Registration failed', errorMessage);
     }
   };
 

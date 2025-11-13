@@ -30,8 +30,10 @@ export default {
         'FOREGROUND_SERVICE',
         'RECEIVE_BOOT_COMPLETED',
         'VIBRATE',
+        'INTERNET',
       ],
       package: 'com.silentsos.app',
+      usesCleartextTraffic: false, // Only HTTPS
     },
     web: {
       bundler: 'metro',
@@ -39,13 +41,28 @@ export default {
       favicon: './assets/favicon.png',
     },
     extra: {
-      apiUrl: process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:4000',
-      eas: {
-        projectId: '00000000-0000-0000-0000-000000000000',
-      },
+      apiUrl: process.env.EXPO_PUBLIC_API_URL ?? 'https://silent-sos.onrender.com',
+      // Project ID will be added automatically by EAS after running 'eas init'
+      // Only include if you have a valid UUID project ID
+      ...(process.env.EXPO_PROJECT_ID && 
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(process.env.EXPO_PROJECT_ID)
+        ? {
+            eas: {
+              projectId: process.env.EXPO_PROJECT_ID,
+            },
+          }
+        : {}),
     },
     updates: {
-      url: 'https://u.expo.dev/00000000-0000-0000-0000-000000000000',
+      ...(process.env.EXPO_PROJECT_ID && 
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(process.env.EXPO_PROJECT_ID)
+        ? {
+            url: `https://u.expo.dev/${process.env.EXPO_PROJECT_ID}`,
+            fallbackToCacheTimeout: 0,
+          }
+        : {
+            fallbackToCacheTimeout: 0,
+          }),
     },
     runtimeVersion: {
       policy: 'sdkVersion',
